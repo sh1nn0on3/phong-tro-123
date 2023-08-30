@@ -76,9 +76,13 @@ export const loginService = async (body) => {
         : null;
 
       const token = checkPassword
-        ? jwt.sign({ id: Users.id, phone: Users.phone }, process.env.JWT_KEY, {
-            expiresIn: "1h",
-          })
+        ? jwt.sign(
+            { id: Users.id, phone: Users.phone },
+            process.env.JWT_KEY,
+            {
+              expiresIn: "1h",
+            }
+          )
         : null;
 
       resolve({

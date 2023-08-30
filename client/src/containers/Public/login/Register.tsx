@@ -1,19 +1,20 @@
-import { useState } from "react";
-import { Button, Input } from "../../../components";
 import { Link } from "react-router-dom";
-import { LoginProps } from "../../../type/auth";
-import { apiLogin } from "../../../services/auth";
+import { Button, Input } from "../../../components";
+import { apiRegister } from "../../../services/auth";
+import { useState } from "react";
+import { RegisterProps } from "../../../type/auth";
 
-const Login = () => {
-  const [data, setData] = useState<LoginProps>({
+const Register = () => {
+  const [data, setData] = useState<RegisterProps>({
+    name: "",
     phone: "",
     password: "",
   });
 
   const handleSubmit = async () => {
     try {
-      const res = await apiLogin(data);
-      setData({ phone: "", password: "" });
+      const res = await apiRegister(data);
+      setData({ name: "", phone: "", password: "" });
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -21,8 +22,16 @@ const Login = () => {
   };
   return (
     <div className="bg-white max-w-[600px] w-[90%] p-[30px] pb-[100px] rounded-md shadow-sm ">
-      <h3 className="font-semibold text-2xl mb-3">Đăng Nhập</h3>
+      <h3 className="font-semibold text-2xl mb-3">Đăng ký tài khoản</h3>
       <div className="w-full flex flex-col gap-3">
+        <Input
+          label={"Họ và tên"}
+          type="text"
+          id={"name"}
+          placeholder={"Nhập họ và tên ..."}
+          value={data.name}
+          setValue={setData}
+        />
         <Input
           label={"Số điện thoại"}
           id={"phone"}
@@ -39,29 +48,28 @@ const Login = () => {
           value={data.password}
           setValue={setData}
         />
+
         <Button
+          onClick={handleSubmit}
           textColor="text-white mt-4"
           bgColor="bg-secondary1"
           icon={null}
-          text={"Đăng nhập"}
-          onClick={handleSubmit}
+          text={"Đăng ký"}
         />
       </div>
       <div className="mt-7 flex items-center justify-between">
-        <>
-          <small className="text-[blue] hover:text-[red] cursor-pointer ">
-            Bạn đã quên mật khẩu
-          </small>
+        <small className="text-center w-full cursor-pointer ">
+          Bạn đã có tài khoản ?{" "}
           <Link
-            to={"/register"}
-            className="text-[blue] hover:text-[red] cursor-pointer"
+            to={"/login"}
+            className="text-[blue] font-[500] hover:text-red-500 transition-all"
           >
-            Tạo tài khoản mới
+            Đăng nhập ngay
           </Link>
-        </>
+        </small>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;

@@ -31,7 +31,7 @@ const Header: any = () => {
           bgColor="bg-[#3961fb]"
           icon=""
           onClick={() => {
-            navigate(path.LOGIN);
+            navigate(path.REGISTER);
           }}
         />
         <Button
