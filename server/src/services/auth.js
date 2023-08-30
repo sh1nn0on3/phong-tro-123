@@ -1,21 +1,22 @@
 import db from "../models";
 import argon2 from "argon2";
 import { v4 as uuidv4 } from "uuid";
+import jwt from "jsonwebtoken";
 
 const hasdPassword = async (password) => {
-  return await argon2.hash(password);
+  return argon2.hash(password);
 };
 
-export const registerService = (body) => {
-  new Promise(async (resolve, reject) => {
+// ~~~~~~~~~~~~~~~ RegisterService ~~~~~~~~~~~~~~~
+export const registerService = async (body) => {
+  return new Promise(async (resolve, reject) => {
     try {
       const { name, phone, password } = body;
-      console.log({ name, phone, password });
 
       // validate
       if (!name || !phone || !password) {
         return resolve({
-          err: -1,
+          err: 1,
           msg: "Please enter all required fields.",
         });
       }
@@ -26,12 +27,10 @@ export const registerService = (body) => {
         defaults: {
           name,
           phone,
-          password : await hasdPassword(password),
+          password: await hasdPassword(password),
           id: uuidv4(),
         },
       });
-
-      console.log(4);
 
       const token = checked
         ? jwt.sign(
@@ -42,9 +41,50 @@ export const registerService = (body) => {
         : null;
 
       resolve({
-        err: token ? 0 : -1,
+        err: token ? 0 : 2,
         msg: token ? "User registered successfully." : "User already exists.",
-        token: token || null,
+        token: `Bearer ${token}` || null,
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+// ~~~~~~~~~~~~~~~ LoginService ~~~~~~~~~~~~~~~
+export const loginService = async (body) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { phone, password } = body;
+
+      // validate
+      if (!phone || !password) {
+        return resolve({
+          err: 1,
+          msg: "Please enter all required fields.",
+        });
+      }
+
+      // check for existing user
+      const Users = await db.User.findAll({
+        where: { phone },
+        raw: true,
+      });
+
+      const checkPassword = Users
+        ? await argon2.verify(Users[0].password, password)
+        : null;
+
+      const token = checkPassword
+        ? jwt.sign({ id: Users.id, phone: Users.phone }, process.env.JWT_KEY, {
+            expiresIn: "1h",
+          })
+        : null;
+
+      resolve({
+        err: token ? 0 : 2,
+        msg: token ? "User logged in successfully." : "Invalid credentials.",
+        token: `Bearer ${token}` || null,
       });
     } catch (error) {
       reject(error);
