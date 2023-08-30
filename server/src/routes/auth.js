@@ -1,13 +1,12 @@
 import express from "express";
+import * as authController from "../controller/auth";
 
 const router = express.Router();
 
 let initRoutes = (app) => {
-    router.get("/hello", (req, res) => {
-        res.send("Hello World!");
-    });
-    
-    return app.use("/", router);
-}
+  router.post("/register", authController.register);
+
+  return app.use("/", router);
+};
 
 export default initRoutes;
