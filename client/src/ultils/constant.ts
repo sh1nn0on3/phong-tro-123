@@ -1,8 +1,4 @@
-interface PathTypes {
-  HOME: string;
-  LOGIN: string;
-  REGISTER: string;
-}
+import { PathTypes } from "../type/PathTypes";
 
 export const path: PathTypes = {
   HOME: "/",

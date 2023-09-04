@@ -56,7 +56,7 @@ export const loginService = async (body) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { phone, password } = body;
-
+      console.log(phone, password);
       // validate
       if (!phone || !password) {
         return resolve({
@@ -71,20 +71,21 @@ export const loginService = async (body) => {
         raw: true,
       });
 
-      const checkPassword = Users
-        ? await argon2.verify(Users[0].password, password)
-        : null;
+      let checkPassword = null;
+      if (Users[0]) {
+        checkPassword = await argon2.verify(Users[0].password, password);
+      } else {
+        return resolve({
+          err: 2,
+          msg: "User not found.",
+        });
+      }
 
       const token = checkPassword
-        ? jwt.sign(
-            { id: Users.id, phone: Users.phone },
-            process.env.JWT_KEY,
-            {
-              expiresIn: "1h",
-            }
-          )
+        ? jwt.sign({ id: Users.id, phone: Users.phone }, process.env.JWT_KEY, {
+            expiresIn: "1h",
+          })
         : null;
-
       resolve({
         err: token ? 0 : 2,
         msg: token ? "User logged in successfully." : "Invalid credentials.",

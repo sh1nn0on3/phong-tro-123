@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/Button";
 import { path } from "../../../ultils/constant";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../../store/auth/authSlice";
 
 const Header: any = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   return (
     <div className="max-w-[1100px] w-full border  flex items-center justify-between">
       <img
@@ -32,6 +36,15 @@ const Header: any = () => {
           icon=""
           onClick={() => {
             navigate(path.REGISTER);
+          }}
+        />
+        <Button
+          text={"Đăng xuất"}
+          textColor="text-white"
+          bgColor="bg-[#3961fb]"
+          icon=""
+          onClick={() => {
+            dispatch(logOut());
           }}
         />
         <Button
