@@ -1,10 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Input } from "../../../components";
-import { apiRegister } from "../../../services/auth";
 import { useState } from "react";
-import { RegisterProps } from "../../../type/auth";
+import { RegisterProps } from "../../../type/login/auth";
+import { useDispatch } from "react-redux";
+import { registerActions } from "../../../store/auth/authActions";
+import { validateRegister } from "./Validate";
+import { RootState } from "../../../store/store";
+import { useSelector } from "react-redux";
+import { initialStateType } from "../../../type/store/auth";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isError, setisError] = useState<boolean>(true);
+  const [message, setMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>();
+  // const dataAuth: initialStateType = useSelector(
+  //   (state: RootState) => state.auth
+  // );
   const [data, setData] = useState<RegisterProps>({
     name: "",
     phone: "",
@@ -13,9 +26,16 @@ const Register = () => {
 
   const handleSubmit = async () => {
     try {
-      const res = await apiRegister(data);
-      setData({ name: "", phone: "", password: "" });
-      console.log(res);
+      setLoading(true);
+      validateRegister({ data, setisError, setMessage });
+      await dispatch(registerActions(data) as any);
+
+      setTimeout(() => {
+        setLoading(false);
+        {
+          0 && navigate("/");
+        }
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
@@ -48,10 +68,14 @@ const Register = () => {
           value={data.password}
           setValue={setData}
         />
-
+        {isError && (
+          <div className="text-center mt-1 text-[18px] text-red-500 font-semibold">
+            {message}
+          </div>
+        )}
         <Button
           onClick={handleSubmit}
-          textColor="text-white mt-4"
+          textColor="text-white transition-all mt-2"
           bgColor="bg-secondary1"
           icon={null}
           text={"Đăng ký"}
@@ -62,7 +86,7 @@ const Register = () => {
           Bạn đã có tài khoản ?{" "}
           <Link
             to={"/login"}
-            className="text-[blue] font-[500] hover:text-red-500 transition-all"
+            className="text-[blue] hover:text-red-500 transition-all"
           >
             Đăng nhập ngay
           </Link>

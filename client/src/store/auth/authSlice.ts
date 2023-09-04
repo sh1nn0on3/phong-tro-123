@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import authActions from "./authActions";
+import { loginActions, registerActions } from "./authActions";
+
 
 interface initialStateType {
   token: any | null;
@@ -8,7 +9,7 @@ interface initialStateType {
   error: string | null;
 }
 
-const initialState: initialStateType = {
+const initialState : initialStateType = {
   token: null,
   isLoading: false,
   user: null,
@@ -28,21 +29,53 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(authActions.pending, (state) => {
+    // pending
+    builder.addCase(loginActions.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(authActions.fulfilled, (state, action:  PayloadAction<any>) => {
-      state.isLoading = false;
-      state.error = action.payload.data.err;
-      state.user = action.payload.data.msg;
-      state.token = action.payload.data.token;
+    builder.addCase(registerActions.pending, (state) => {
+      state.isLoading = true;
     });
-    builder.addCase(authActions.rejected, (state, action: PayloadAction<any>) => {
-      state.isLoading = false;
-      state.error = action.payload;
-      state.user = null;
-      state.token = null;
-    });
+
+    // fulfilled
+    builder.addCase(
+      loginActions.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.error = action.payload.data.err;
+        state.user = action.payload.data.msg;
+        state.token = action.payload.data.token;
+      }
+    );
+    builder.addCase(
+      registerActions.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.error = action.payload.data.err;
+        state.user = action.payload.data.msg;
+        state.token = action.payload.data.token;
+      }
+    );
+
+    // rejected
+    builder.addCase(
+      loginActions.rejected,
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.user = null;
+        state.token = null;
+      }
+    );
+    builder.addCase(
+      registerActions.rejected,
+      (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.user = null;
+        state.token = null;
+      }
+    );
   },
 });
 

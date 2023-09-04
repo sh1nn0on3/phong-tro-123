@@ -1,5 +1,5 @@
 import axiosConfig from "../axiosConfig";
-import { LoginProps, RegisterProps } from "../type/auth";
+import { LoginProps, RegisterProps } from "../type/login/auth";
 
 export const apiRegister = async (data: RegisterProps) => {
   try {

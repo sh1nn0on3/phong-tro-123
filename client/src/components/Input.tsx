@@ -1,14 +1,7 @@
 import { memo } from "react";
-import { RegisterProps } from "../type/auth";
+import { RegisterProps } from "../type/login/auth";
+import { InputProps } from "../type/components";
 
-interface InputProps {
-  id: string;
-  label: string;
-  placeholder: string;
-  value: string;
-  setValue: any;
-  type: string;
-}
 
 const Input = ({
   id,

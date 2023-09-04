@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Button, Input } from "../../../components";
 import { Link } from "react-router-dom";
-import { LoginProps } from "../../../type/auth";
+import { LoginProps } from "../../../type/login/auth";
 import { useDispatch } from "react-redux";
-import authActions from "../../../store/auth/authActions";
+import { loginActions } from "../../../store/auth/authActions";
+
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -16,8 +17,8 @@ const Login = () => {
   const handleSubmit = async () => {
     try {
       // const res: any = await apiLogin(data);
-      dispatch(authActions(data) as any);
-      setData({ phone: "", password: "" });
+      dispatch(loginActions(data) as any);
+      // setData({ phone: "", password: "" });
       // console.log(res.data);
     } catch (error) {
       console.log(error);

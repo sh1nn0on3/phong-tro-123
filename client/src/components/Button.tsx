@@ -1,12 +1,6 @@
-interface BtnType {
-  text: string;
-  textColor: string;
-  bgColor: string;
-  icon: any | null;
-  onClick: () => void | any;
-}
+import { ButtonType } from "../type/components";
 
-const Button = ({ text, textColor, bgColor, icon, onClick }: BtnType) => {
+const Button = ({ text, textColor, bgColor, icon, onClick }: ButtonType) => {
   return (
     <button
       type="button"
