@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Input } from "../../../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RegisterProps } from "../../../type/login/auth";
 import { useDispatch } from "react-redux";
 import { registerActions } from "../../../store/auth/authActions";
@@ -15,9 +15,9 @@ const Register = () => {
   const [isError, setisError] = useState<boolean>(true);
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>();
-  // const dataAuth: initialStateType = useSelector(
-  //   (state: RootState) => state.auth
-  // );
+  const dataAuth: initialStateType = useSelector(
+    (state: RootState) => state.auth
+  );
   const [data, setData] = useState<RegisterProps>({
     name: "",
     phone: "",
@@ -27,15 +27,17 @@ const Register = () => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      validateRegister({ data, setisError, setMessage });
-      await dispatch(registerActions(data) as any);
-
-      setTimeout(() => {
-        setLoading(false);
-        {
-          0 && navigate("/");
+      validateRegister({ data, setisError, setMessage, setLoading });
+      dispatch(registerActions(data) as any);
+      useEffect(() => {
+        if (dataAuth.error === 0) {
+          setLoading(false)
+          navigate("/");
+        } else {
+          setisError(true);
+          setMessage(dataAuth.user);
         }
-      }, 2000);
+      }, [dataAuth.error]);
     } catch (error) {
       console.log(error);
     }
