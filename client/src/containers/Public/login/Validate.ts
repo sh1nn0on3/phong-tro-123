@@ -32,19 +32,31 @@ export const validateRegister = ({
     setMessage("Vui lòng nhập đầy đủ thông tin");
     return;
   }
-  if (data.password.length < 3) {
+  if (data.name.length < 3) {
     setisError(true);
     setLoading(false);
-    setMessage("Mật khẩu phải lớn hơn 3 ký tự");
+    setMessage("Tên phải lớn hơn 3 ký tự");
     return;
   }
-  setisError(false);
+  if (data.phone.length < 10) {
+    setisError(true);
+    setLoading(false);
+    setMessage("Số điện thoại phải lớn hơn 10 ký tự");
+    return;
+  }
+  if (data.password.length < 6) {
+    setisError(true);
+    setLoading(false);
+    setMessage("Mật khẩu phải lớn hơn 6 ký tự");
+    return;
+  }
 };
 
 export const validateLogin = ({
   data,
   setisError,
   setMessage,
+  setLoading,
 }: IValidateLogin) => {
   if (!data.phone || !data.password) {
     setisError(true);
@@ -52,9 +64,16 @@ export const validateLogin = ({
     setMessage("Vui lòng nhập đầy đủ thông tin");
     return;
   }
-  if (data.password.length < 3) {
+  if (data.phone.length < 10) {
     setisError(true);
-    setMessage("Mật khẩu phải lớn hơn 3 ký tự");
+    setLoading(false);
+    setMessage("Số điện thoại phải lớn hơn 10 ký tự");
+    return;
+  }
+  if (data.password.length < 6) {
+    setisError(true);
+    setLoading(false);
+    setMessage("Mật khẩu phải lớn hơn 6 ký tự");
     return;
   }
   setisError(false);

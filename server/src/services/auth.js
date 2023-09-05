@@ -12,12 +12,26 @@ export const registerService = async (body) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { name, phone, password } = body;
-
       // validate
       if (!name || !phone || !password) {
         return resolve({
           err: 1,
           msg: "Please enter all required fields.",
+        });
+      } else if (name.length < 3) {
+        return resolve({
+          err: 1,
+          msg: "Name must be atleast 3 characters.",
+        });
+      } else if (phone.length !== 10) {
+        return resolve({
+          err: 1,
+          msg: "Please enter valid phone number.",
+        });
+      } else if (password.length < 6) {
+        return resolve({
+          err: 1,
+          msg: "Password must be atleast 6 characters.",
         });
       }
 
@@ -62,6 +76,16 @@ export const loginService = async (body) => {
         return resolve({
           err: 1,
           msg: "Please enter all required fields.",
+        });
+      } else if (phone.length !== 10) {
+        return resolve({
+          err: 1,
+          msg: "Please enter valid phone number.",
+        });
+      } else if (password.length < 6) {
+        return resolve({
+          err: 1,
+          msg: "Password must be atleast 6 characters.",
         });
       }
 

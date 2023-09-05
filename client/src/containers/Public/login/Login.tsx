@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input } from "../../../components";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginProps } from "../../../type/login/auth";
@@ -18,27 +18,29 @@ const Login = () => {
   const dataAuth: initialStateType = useSelector(
     (state: RootState) => state.auth
   );
-  console.log(dataAuth);
 
   const [data, setData] = useState<LoginProps>({
     phone: "",
     password: "",
   });
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (dataAuth.error === 0) {
+        setLoading(false);
+        navigate("/");
+      } else {
+        setisError(true);
+        setMessage(dataAuth.user);
+      }
+    }, 1000);
+  }, [dataAuth.error]);
+
   const handleSubmit = async () => {
     try {
       setLoading(true);
       validateLogin({ data, setisError, setMessage, setLoading });
       await dispatch(loginActions(data) as any);
-      setTimeout(() => {
-        setLoading(false);
-        if (dataAuth.error === 0) {
-          navigate("/");
-        } else {
-          setisError(true);
-          setMessage(dataAuth.user);
-        }
-      }, 0);
     } catch (error) {
       console.log(error);
     }

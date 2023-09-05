@@ -24,20 +24,23 @@ const Register = () => {
     password: "",
   });
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (dataAuth.error === 0) {
+        setLoading(false);
+        navigate("/");
+      } else {
+        setisError(true);
+        setMessage(dataAuth.user);
+      }
+    }, 1000);
+  }, [dataAuth.error]);
+
   const handleSubmit = async () => {
     try {
       setLoading(true);
       validateRegister({ data, setisError, setMessage, setLoading });
       dispatch(registerActions(data) as any);
-      useEffect(() => {
-        if (dataAuth.error === 0) {
-          setLoading(false)
-          navigate("/");
-        } else {
-          setisError(true);
-          setMessage(dataAuth.user);
-        }
-      }, [dataAuth.error]);
     } catch (error) {
       console.log(error);
     }
