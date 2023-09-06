@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { path } from "./ultils/constant";
+import { path } from "./utils/constant";
 import Home from "./containers/Public/home";
 import Login from "./containers/Public/login/Login";
 import Register from "./containers/Public/login/Register";

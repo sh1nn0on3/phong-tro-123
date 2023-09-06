@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/Button";
-import { path } from "../../../ultils/constant";
+import { path } from "../../../utils/constant";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../../store/auth/authSlice";
 import React, { useEffect, useState } from "react";
